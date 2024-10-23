@@ -1,0 +1,43 @@
+# Stage 1: Base Image for installing dependencies
+FROM node:lts-bullseye AS base
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy package and lock files first to leverage Docker cache for dependencies
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies for all workspaces in the monorepo
+RUN pnpm install --frozen-lockfile
+
+# Stage 2: Web-specific image (Next.js development server)
+FROM base AS web
+# Copy the source code into the container (excluding node_modules as per .dockerignore)
+COPY . .
+# Ensure dependencies are linked correctly for the web workspace
+RUN pnpm install
+# Expose the Next.js development port
+EXPOSE 3333
+# Set the command to run the Next.js dev server
+CMD ["pnpm", "--filter=www", "dev"]
+
+# Stage 3: Tests-specific image
+FROM base AS tests
+# Copy the source code into the container
+COPY . .
+# Ensure dependencies are linked correctly for the tests
+RUN pnpm install
+# Set the command to run the test suite
+CMD ["pnpm", "test"]
+
+# Stage 4: CLI-specific image
+FROM base AS cli
+# Copy the source code into the container
+COPY . .
+# Ensure dependencies are linked correctly for the CLI workspace
+RUN pnpm install
+# Set the command to run the CLI development server
+CMD ["pnpm", "--filter=shadcn-ui", "dev"]

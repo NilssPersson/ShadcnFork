@@ -1,0 +1,47 @@
+services:
+  # Next.js development environment for the shadcn website
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: web # Use the web-specific stage from the Dockerfile
+    ports:
+      - "3333:3333" # Expose the Next.js development port
+    volumes:
+      - .:/app:delegated # Mount project files into the container (excluding node_modules)
+      - /app/node_modules # Mount the root node_modules directory to avoid host installation
+      - /app/apps/www/node_modules # Workspace-specific node_modules for www
+      - /app/packages/cli/node_modules # Workspace-specific node_modules for CLI
+      - /app/packages/shadcn/node_modules # Workspace-specific node_modules for shadcn
+    tty: true # Allocate a pseudo-TTY for interactive commands
+    stdin_open: true # Keep STDIN open for interaction
+
+  # Service for running the test suite
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: tests # Use the tests-specific stage from the Dockerfile
+    volumes:
+      - .:/app:delegated # Mount project files into the container (excluding node_modules)
+      - /app/node_modules # Mount the root node_modules directory
+      - /app/apps/www/node_modules # Workspace-specific node_modules for www
+      - /app/packages/cli/node_modules # Workspace-specific node_modules for CLI
+      - /app/packages/shadcn/node_modules # Workspace-specific node_modules for shadcn
+    command: pnpm test # Run the test suite
+
+  # CLI development environment for shadcn-ui package
+  cli:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: cli # Use the CLI-specific stage from the Dockerfile
+    volumes:
+      - .:/app:delegated # Mount project files into the container (excluding node_modules)
+      - /app/node_modules # Mount the root node_modules directory
+      - /app/apps/www/node_modules # Workspace-specific node_modules for www
+      - /app/packages/cli/node_modules # Workspace-specific node_modules for CLI
+      - /app/packages/shadcn/node_modules # Workspace-specific node_modules for shadcn
+    command: pnpm --filter=shadcn-ui dev # Run the CLI development environment
+    tty: true # Allocate a pseudo-TTY for interactive commands
+    stdin_open: true # Keep STDIN open for interaction
