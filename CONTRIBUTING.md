@@ -67,6 +67,9 @@ cd ui
 git checkout -b my-new-branch
 ```
 
+### Without Docker
+This section is for those who want to run the project without Docker. If you want to use Docker, please skip to the next section.
+
 ### Install dependencies
 
 ```bash
@@ -90,6 +93,76 @@ pnpm --filter=www dev
 ```bash
 pnpm --filter=shadcn-ui dev
 ```
+
+### Using Docker
+
+We have implemented containerization using [Docker](https://www.docker.com/get-started) to streamline the development environment. This ensures consistency across different environments and makes it easier to get started if you're already familiar with Docker. However, it requires an understanding of [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/), **so please make sure you're comfortable with these tools before proceeding**. Using Docker is optional, and you can run the project without it (see the previous section) - although we recommend using Docker for a consistent development environment.
+
+#### Prerequisites
+
+Make sure you have the following installed on your system:
+
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+#### Building and Running the Development Environment with Docker
+
+1. **Build the Docker image:**
+
+   First, you need to build the Docker image. You can do this by running the following command:
+
+   ```bash
+   docker-compose build
+  ```
+
+2. **Start the development environment:**
+
+   Once the image has been built, you can start the development environment for the workspace you want to work on. 
+
+   - To start the `ui.shadcn.com` website in the `www` workspace:
+   ```bash	
+    docker-compose up web
+    ```
+    Now, you can access the website at `http://localhost:3333` in your browser.
+
+    - To start the `shadcn-ui` package in the `cli` workspace:
+    ```bash	
+    docker-compose up cli
+    ```
+    - To run the tests:
+    ```bash
+    docker-compose up test
+    ```
+    - You can also run all the environments at once:
+    ```bash
+    docker-compose up
+    ```
+
+3. **Stop the development environment:**
+
+   To stop the development environment, you can run the following command:
+
+   ```bash
+   docker-compose down
+   ```
+
+4. **Rebuilding the Docker image:**
+
+   If you make changes to the Dockerfile or any other configuration files, you will need to rebuild the Docker image. You can do this by running the following command:
+
+   ```bash
+   docker-compose build
+   ```
+
+5. **Running commands inside the Docker container:**
+
+   You can run commands inside the Docker container by using the `docker-compose exec` command. For example, to run the tests inside the Docker container, you can use the following command:
+
+   ```bash
+   docker-compose exec web pnpm test
+   ```
+
+   This will run the tests inside the Docker container of the `www` workspace for the `ui.shadcn.com` website. In this case, the `web` service container is used to run the tests. You can replace `web` with `cli` or any other service name to run commands inside the container of that service.
 
 ## Documentation
 
