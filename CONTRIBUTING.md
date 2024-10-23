@@ -105,9 +105,7 @@ Make sure you have the following installed on your system:
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-#### Building and Running the Development Environment with Docker
-
-1. **Build the Docker image:**
+#### Build the Docker image
 
 First, you need to build the Docker image. You can do this by running the following command:
 
@@ -115,33 +113,33 @@ First, you need to build the Docker image. You can do this by running the follow
   docker-compose build
 ```
 
-2. **Start the development environment:**
+#### Start the development environment
 
 Once the image has been built, you can start the development environment for the workspace you want to work on. 
 
-**To start the `ui.shadcn.com` website in the `www` workspace:**
+To start the `ui.shadcn.com` website in the `www` workspace:
   
 ```bash	
 docker-compose up web
 ```
 Now, you can access the website at [http://localhost:3333](http://localhost:3333) in your browser.
 
-**To start the `shadcn-ui` package in the `cli` workspace:**
+To start the `shadcn-ui` package in the `cli` workspace:
 ```bash	
   docker-compose up cli
 ```
 
-**To run the tests:**
+To run the tests:
 ```bash
 docker-compose up test
 ```
 
-**You can also run all the environments at once:**
+You can also run all the environments at once:
 ```bash
 docker-compose up
 ```
 
-3. **Stop the development environment:**
+#### Stopping the development environment
 
 To stop the development environment, you can run the following command:
 
@@ -149,7 +147,7 @@ To stop the development environment, you can run the following command:
 docker-compose down
 ```
 
-4. **Rebuilding the Docker image:**
+#### Rebuilding the Docker image
 
 If you make changes to the Dockerfile or any other configuration files, you will need to rebuild the Docker image. You can do this by running the following command:
 
@@ -157,7 +155,7 @@ If you make changes to the Dockerfile or any other configuration files, you will
 docker-compose build
 ```
 
-5. **Running commands inside the Docker container:**
+#### Running commands inside the Docker container
 
 You can run commands inside the Docker container by using the `docker-compose exec` command. For example, to run the tests inside the Docker container, you can use the following command:
 
